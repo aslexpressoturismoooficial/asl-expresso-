@@ -1,5 +1,4 @@
 
-<!doctype html>
 <html lang="pt-BR">
 <head>
       <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -160,47 +159,14 @@ function escolherViagem(nome){
  document.getElementById('viagem').value=nome;
  document.getElementById('reserva').scrollIntoView({behavior:'smooth'});
 }
-async function enviarWhatsApp(){
-async function salvarReservaSupabase(nome, telefone, viagem, embarque, poltronas) {
+function enviarWhatsApp(){
  const nome=document.getElementById('nome').value.trim(), telefone=document.getElementById('telefone').value.trim();
  const viagem=document.getElementById('viagem').value, embarque=document.getElementById('embarque').value;
  const list=[...selected].sort((a,b)=>a-b).map(n=>String(n).padStart(2,'0'));
  const error=document.getElementById('error'); error.textContent='';
  if(!nome||!telefone||!viagem||!embarque||!list.length){error.textContent='Preencha os dados e selecione pelo menos uma poltrona.';return;}
  const text=`Olá, ASL Expresso! Quero solicitar uma reserva.\n\n👤 Responsável: ${nome}\n📱 WhatsApp: ${telefone}\n🧳 Viagem: ${viagem}\n📍 Embarque: ${embarque}\n💺 Poltrona(s): ${list.join(', ')}\n🎟️ Quantidade: ${list.length}\n\nAguardo a confirmação da ASL Expresso.`;
- const { error } = await supabaseClient
-  .from('reservas')
-  .insert(
-    selected.map(poltrona => ({
-      nome: nome,
-      telefone: telefone,
-      viagem: viagem,
-      embarque: embarque,
-      poltrona: poltrona
-    }))
-  );
-
-if (error) {
-  alert('Não foi possível reservar a poltrona. Tente novamente.');
-  console.error(error);
-  return;
-}window.open('https://wa.me/5599984690434?text='+encodeURIComponent(text),'_blank');
+ window.open('https://wa.me/5599984690434?text='+encodeURIComponent(text),'_blank');
 }
-const SUPABASE_URL = 'https:=//fvaekjvezsmursoiudwn.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_b1PMWZfZe9-le-GzLUONww_hWYSLTkN';
-const supabaseClient = supabase.createclient(SUPABASE_URL, SUPABASE_KEY);
-async function carregarPoltronasOcupadas() {
-  const { data, error } = await supabaseClient
-    .from('reservas')
-    .select('*');
-
-  if (error) {
-    console.error('Erro ao carregar reservas:', error);
-    return;
-  }
-
-  console.log('Reservas carregadas:', data);
-}
-carregarPoltronasOcupadas();
 </script>
 </body></html>
