@@ -1,0 +1,222 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <meta charset="utf-8">
+      
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06182d">
+<title>ASL Expresso | Viagens e Turismo</title>
+<style>
+:root{--azul:#0874d1;--azul2:#075eae;--escuro:#06182d;--claro:#f5f8fc;--verde:#25d366;--amarelo:#ffc400}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--claro);color:#0b2545}
+header{position:sticky;top:0;z-index:20;background:#030a14;color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 3px 16px #0004}
+.brand{font-size:24px;font-weight:900}.brand span{color:#39a5ff}nav a{color:white;text-decoration:none;margin-left:18px;font-weight:700}
+.hero{min-height:66vh;display:flex;align-items:center;padding:70px 7%;color:white;background:linear-gradient(90deg,#031426ee,#075eaecc),url("sul-sudeste.jpeg") center/cover}
+.hero-inner{max-width:760px}.hero h1{font-size:clamp(42px,7vw,76px);line-height:.95;margin:0 0 18px}.hero p{font-size:20px;line-height:1.5;max-width:650px}
+.cta,.trip-card button{border:0;border-radius:12px;padding:14px 18px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-block}
+.cta{background:white;color:#075eae}section{padding:55px 6%}.title{font-size:36px;text-align:center;margin:0 0 8px}.subtitle{text-align:center;color:#64748b;margin:0 auto 30px;max-width:760px;line-height:1.5}
+.trips{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;max-width:1250px;margin:auto}
+.trip-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px #0b25451a;transition:.2s}.trip-card:hover{transform:translateY(-4px)}
+.trip-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}.trip-info{padding:17px}.trip-info h3{margin:0 0 7px;font-size:20px}.trip-info p{color:#64748b;margin:0 0 14px}.trip-card button{width:100%;background:#075eae;color:white}
+#reserva{background:#eaf2f9}.booking{max-width:920px;margin:auto;background:white;border-radius:24px;padding:28px;box-shadow:0 10px 35px #0b25451c}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{font-weight:800;display:block;margin:0 0 7px}input,select{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:11px;font-size:16px;background:white}
+.bus{max-width:520px;margin:30px auto 0;background:#e9f0f6;border:3px solid #bdcad6;border-radius:42px 42px 20px 20px;padding:22px}
+.driver{display:flex;justify-content:space-between;align-items:center;margin:0 8px 22px;font-weight:900;color:#526779}.wheel{font-size:30px}
+.seat-row{display:grid;grid-template-columns:1fr 1fr 42px 1fr 1fr;gap:8px;margin-bottom:9px}.aisle{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:10px}
+.seat{height:48px;border:2px solid #cbd5e1;border-radius:12px;background:white;color:#075eae;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 2px 5px #0001}
+.seat:hover{border-color:#0874d1}.seat.selected{background:#0874d1;color:white;border-color:#0874d1;transform:scale(1.04)}.seat.occupied{background:#dc3545;color:white;border-color:#dc3545;cursor:not-allowed}
+.rear{text-align:center;background:#cbd5e1;border-radius:9px;padding:8px;font-weight:800;color:#526779;margin-top:12px}
+.legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:18px;font-size:14px}.dot{width:14px;height:14px;display:inline-block;border-radius:4px;vertical-align:-2px;margin-right:5px;border:1px solid #aaa}.d-free{background:white}.d-sel{background:#0874d1}.d-occ{background:#dc3545}
+.summary{margin-top:24px;padding:17px;background:#f3f8fd;border-radius:14px;line-height:1.7}.error{color:#b42318;font-weight:800;margin-top:12px}.whats{width:100%;margin-top:16px;background:var(--verde);color:white;border:0;border-radius:13px;padding:16px;font-size:17px;font-weight:900;cursor:pointer}
+footer{background:#030a14;color:white;text-align:center;padding:30px}
+@media(max-width:680px){nav{display:none}section{padding:42px 4%}.form-grid{grid-template-columns:1fr}.booking{padding:18px}.bus{padding:18px 11px}.seat-row{grid-template-columns:1fr 1fr 30px 1fr 1fr;gap:6px}.seat{height:45px}.title{font-size:30px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span>ASL</span> EXPRESSO</div><nav><a href="#viagens">Viagens</a><a href="#reserva">Escolher poltrona</a></nav></header>
+<section class="hero"><div class="hero-inner"><h1>Grandes destinos.<br>Grandes histórias.</h1><p>Conheça as viagens da ASL Expresso, escolha seu destino e selecione suas próprias poltronas de forma simples.</p><a class="cta" href="#viagens">Ver próximas viagens</a></div></section>
+
+<section id="viagens"><h2 class="title">Próximas viagens</h2><p class="subtitle">Clique em “Reservar esta viagem”. A viagem escolhida já aparecerá no formulário e você poderá marcar uma ou várias poltronas.</p>
+<div class="trips"><article class="trip-card">
+      <img src="chile.jpeg" alt="Arte da viagem Chile no Outono" loading="lazy">
+      <div class="trip-info"><h3>Chile no Outono</h3><p>10 a 14 de junho de 2027</p>
+      <button onclick="escolherViagem('Chile no Outono')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="rio.jpeg" alt="Arte da viagem Rio de Janeiro" loading="lazy">
+      <div class="trip-info"><h3>Rio de Janeiro</h3><p>02 a 06 de maio de 2027</p>
+      <button onclick="escolherViagem('Rio de Janeiro')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="cirio.jpeg" alt="Arte da viagem Círio de Nazaré • Belém" loading="lazy">
+      <div class="trip-info"><h3>Círio de Nazaré • Belém</h3><p>09 a 11 de outubro</p>
+      <button onclick="escolherViagem('Círio de Nazaré • Belém')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="fortaleza.jpeg" alt="Arte da viagem Réveillon • Fortaleza" loading="lazy">
+      <div class="trip-info"><h3>Réveillon • Fortaleza</h3><p>30/12 a 01/01</p>
+      <button onclick="escolherViagem('Réveillon • Fortaleza')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="camocim.jpeg" alt="Arte da viagem Praia de Camocim" loading="lazy">
+      <div class="trip-info"><h3>Praia de Camocim</h3><p>31/10 a 01/11</p>
+      <button onclick="escolherViagem('Praia de Camocim')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="gramado.jpeg" alt="Arte da viagem Gramado/RS" loading="lazy">
+      <div class="trip-info"><h3>Gramado/RS</h3><p>24 a 28 de fevereiro de 2027</p>
+      <button onclick="escolherViagem('Gramado/RS')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="cumbuco.jpeg" alt="Arte da viagem Cumbuco + Guaramiranga" loading="lazy">
+      <div class="trip-info"><h3>Cumbuco + Guaramiranga</h3><p>20 a 22 de novembro</p>
+      <button onclick="escolherViagem('Cumbuco + Guaramiranga')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="park-eldorado.jpeg" alt="Arte da viagem Park Eldorado • Dia das Crianças" loading="lazy">
+      <div class="trip-info"><h3>Park Eldorado • Dia das Crianças</h3><p>11 de outubro</p>
+      <button onclick="escolherViagem('Park Eldorado • Dia das Crianças')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="canoa-quebrada.jpeg" alt="Arte da viagem Canoa Quebrada" loading="lazy">
+      <div class="trip-info"><h3>Canoa Quebrada</h3><p>30/10 a 01/11</p>
+      <button onclick="escolherViagem('Canoa Quebrada')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="macapa.jpeg" alt="Arte da viagem Praia de Macapá" loading="lazy">
+      <div class="trip-info"><h3>Praia de Macapá</h3><p>28 a 29 de novembro</p>
+      <button onclick="escolherViagem('Praia de Macapá')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="sul-sudeste.jpeg" alt="Arte da viagem Sul e Sudeste do Brasil" loading="lazy">
+      <div class="trip-info"><h3>Sul e Sudeste do Brasil</h3><p>08 a 30 de julho de 2027</p>
+      <button onclick="escolherViagem('Sul e Sudeste do Brasil')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="jericoacoara.jpeg" alt="Arte da viagem Jericoacoara + Sítio do Bosco" loading="lazy">
+      <div class="trip-info"><h3>Jericoacoara + Sítio do Bosco</h3><p>17 a 20 de dezembro</p>
+      <button onclick="escolherViagem('Jericoacoara + Sítio do Bosco')">Reservar esta viagem</button></div>
+    </article>
+<article class="trip-card">
+      <img src="barra-grande.jpeg" alt="Arte da viagem Barra Grande • Piauí" loading="lazy">
+      <div class="trip-info"><h3>Barra Grande • Piauí</h3><p>21 a 22 de novembro</p>
+      <button onclick="escolherViagem('Barra Grande • Piauí')">Reservar esta viagem</button></div>
+    </article></div></section>
+
+<section id="reserva"><h2 class="title">Mapa de poltronas • 01 a 48</h2><p class="subtitle">Selecione quantas poltronas precisar. Clique novamente em uma poltrona azul para desmarcá-la.</p>
+<div class="booking">
+<div class="form-grid">
+<div><label for="nome">Nome do responsável</label><input id="nome" placeholder="Digite seu nome"></div>
+<div><label for="telefone">WhatsApp</label><input id="telefone" placeholder="(99) 99999-9999"></div>
+<div><label for="viagem">Viagem</label><select id="viagem"><option value="">Selecione uma viagem</option><option>Chile no Outono</option><option>Rio de Janeiro</option><option>Círio de Nazaré • Belém</option><option>Réveillon • Fortaleza</option><option>Praia de Camocim</option><option>Gramado/RS</option><option>Cumbuco + Guaramiranga</option><option>Park Eldorado • Dia das Crianças</option><option>Canoa Quebrada</option><option>Praia de Macapá</option><option>Sul e Sudeste do Brasil</option><option>Jericoacoara + Sítio do Bosco</option><option>Barra Grande • Piauí</option></select></div>
+<div><label for="embarque">Cidade de embarque</label><select id="embarque"><option value="">Selecione</option><option>Codó</option><option>Caxias</option><option>Timon</option><option>Teresina</option><option>Outra cidade</option></select></div>
+</div>
+
+<div class="bus">
+<div class="driver"><span>🚌 FRENTE DO ÔNIBUS</span><span class="wheel">◉</span></div>
+<div id="seatMap"></div>
+<div class="rear">TRASEIRA DO ÔNIBUS</div>
+<div class="legend"><span><i class="dot d-free"></i>Livre</span><span><i class="dot d-sel"></i>Selecionada</span><span><i class="dot d-occ"></i>Ocupada</span></div>
+</div>
+
+<div class="summary" id="summary"><strong>Poltronas selecionadas:</strong> nenhuma<br><strong>Quantidade:</strong> 0</div>
+<div class="error" id="error"></div>
+<button class="whats" onclick="enviarWhatsApp()">Confirmar solicitação pelo WhatsApp</button>
+</div></section>
+
+<footer><strong>ASL Expresso • Viagens e Turismo</strong><br><br>WhatsApp: (99) 98469-0434 &nbsp; • &nbsp; Instagram: @asl_expresso</footer>
+
+<script>
+const SUPABASE_URL = 'https://fvaekjvezsmursouidwn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_b1PMWZfZe9-le-GzLUONww_hWYSLTkN';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const selected = new Set();
+const occupied = new Set();
+const seatMap = document.getElementById('seatMap');
+
+for(let row=0; row<12; row++){
+  const line=document.createElement('div'); line.className='seat-row';
+  const nums=[row*4+1,row*4+2,row*4+3,row*4+4];
+  nums.forEach((n,idx)=>{
+    if(idx===2){const aisle=document.createElement('div');aisle.className='aisle';aisle.textContent='•';line.appendChild(aisle);}
+    const b=document.createElement('button'); b.type='button'; b.className='seat';
+    b.textContent=String(n).padStart(2,'0'); b.dataset.seat=String(n);
+    b.onclick=()=>toggleSeat(b,n);
+    line.appendChild(b);
+  });
+  seatMap.appendChild(line);
+}
+
+function paintSeats(){
+ document.querySelectorAll('.seat').forEach(b=>{
+   const n=Number(b.dataset.seat);
+   b.classList.toggle('occupied',occupied.has(n));
+   b.classList.toggle('selected',selected.has(n) && !occupied.has(n));
+   b.disabled=occupied.has(n);
+ });
+}
+
+async function loadOccupied(){
+ const viagem=document.getElementById('viagem').value;
+ occupied.clear(); selected.clear(); updateSummary();
+ if(!viagem){ paintSeats(); return; }
+ const {data,error}=await db.from('reservas').select('poltrona').eq('viagem',viagem);
+ if(error){ document.getElementById('error').textContent='Não foi possível carregar as poltronas ocupadas. Tente novamente.'; paintSeats(); return; }
+ (data||[]).forEach(r=>{
+   String(r.poltrona||'').split(',').forEach(v=>{ const n=parseInt(v.trim(),10); if(n) occupied.add(n); });
+ });
+ paintSeats();
+}
+
+function toggleSeat(btn,n){
+ if(occupied.has(n)) return;
+ if(selected.has(n)){selected.delete(n);btn.classList.remove('selected');}
+ else{selected.add(n);btn.classList.add('selected');}
+ updateSummary();
+}
+function updateSummary(){
+ const list=[...selected].sort((a,b)=>a-b).map(n=>String(n).padStart(2,'0'));
+ document.getElementById('summary').innerHTML='<strong>Poltronas selecionadas:</strong> '+(list.length?list.join(', '):'nenhuma')+'<br><strong>Quantidade:</strong> '+list.length;
+}
+function escolherViagem(nome){
+ document.getElementById('viagem').value=nome;
+ loadOccupied();
+ document.getElementById('reserva').scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('viagem').addEventListener('change',loadOccupied);
+
+// Atualiza o mapa automaticamente quando qualquer reserva for criada/alterada/excluída no Supabase.
+db.channel('reservas-tempo-real')
+  .on('postgres_changes',{event:'*',schema:'public',table:'reservas'},()=>loadOccupied())
+  .subscribe();
+
+async function enviarWhatsApp(){
+ const nome=document.getElementById('nome').value.trim(), telefone=document.getElementById('telefone').value.trim();
+ const viagem=document.getElementById('viagem').value, embarque=document.getElementById('embarque').value;
+ const seats=[...selected].sort((a,b)=>a-b);
+ const list=seats.map(n=>String(n).padStart(2,'0'));
+ const errorEl=document.getElementById('error'); errorEl.textContent='';
+ if(!nome||!telefone||!viagem||!embarque||!list.length){errorEl.textContent='Preencha os dados e selecione pelo menos uma poltrona.';return;}
+
+ // Uma linha por poltrona: assim a restrição UNIQUE (viagem, poltrona) realmente impede duplicidade.
+ const rows=list.map(poltrona=>({viagem,nome,telefone,embarque,poltrona,quantidade:1,status:'pendente'}));
+ const {error}=await db.from('reservas').insert(rows);
+ if(error){
+   if(error.code==='23505'){
+     errorEl.textContent='Uma dessas poltronas acabou de ser reservada por outra pessoa. Escolha outra poltrona.';
+     await loadOccupied();
+   }else{
+     errorEl.textContent='Não foi possível registrar a reserva. Tente novamente.';
+     console.error(error);
+   }
+   return;
+ }
+ seats.forEach(n=>occupied.add(n)); selected.clear(); paintSeats(); updateSummary();
+ const text=`Olá, ASL Expresso! Quero solicitar uma reserva.\n\n👤 Responsável: ${nome}\n📱 WhatsApp: ${telefone}\n🧳 Viagem: ${viagem}\n📍 Embarque: ${embarque}\n💺 Poltrona(s): ${list.join(', ')}\n🎟️ Quantidade: ${list.length}\n\nAguardo a confirmação da ASL Expresso.`;
+ window.open('https://wa.me/5599984690434?text='+encodeURIComponent(text),'_blank');
+}
+</script>
+</body></html>
